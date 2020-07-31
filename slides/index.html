@@ -1,0 +1,669 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Kubernetes Introduction</title>
+
+		<!-- bootstrap -->
+		<link rel="stylesheet" href="ext/bootstrap-4.1.3/css/bootstrap.css">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/white.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!-- remove annoying shadow around images -->
+		<style>
+			.reveal section img {
+				background-color:white;
+				border:0;
+				box-shadow: 0 0 0 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<h3>Kubernetes</h3>
+
+					<img src="img/logo_kubernetes.svg" class="center-block" style="background-color:white;border:0;width: 40%"/>
+					<!-- h5>+ how to prepare your service</h5 -->
+					<br />
+
+					<h6><small>W<span style="text-transform: lowercase;">ojciech</span> B<span style="text-transform: lowercase;">arczyński</span> - <a href="https://codility.com" style="color:#ffe400">C<span style="text-transform: lowercase;">odility_</span></a><br />
+							<span style="text-transform: lowercase;"></span></small>
+				</section>
+
+				<!-- section>
+					<h3>Wojciech Barczyński</h3>
+					<div class="container">
+						<div class="row">
+							<div class='col-md-8'>
+								<ul>
+									<li>Lead Software Developer<br />&amp; System Engineer</li>
+									<li>Organizer Golang Warsaw Meetup</li>
+									<li>Visiting Lecturer at WSB and ALK</li>
+									<li>Trainings &amp; Consultancy</li>
+								</ul>
+							</div>
+							<div class='col-md-3'>
+								<img style="padding:12px" src="img/.png" />
+							</div>
+						</div>
+						<div class="row d-flex flex-row justify-content-center align-items-center">
+							<br />
+							<br />
+							<br />
+							<p><small>G<span style="text-transform: lowercase;">ithub: </span><a href="https://github.com/wojciech12" style="color:#fe702f"><span style="text-transform: lowercase;">wojciech12</span></a>
+								| Linked: <a href="https://www.linkedin.com/in/wojciechbarczynski/" style="color:#fe702f">IN</a>
+								| HP<span style="text-transform: lowercase;">: </span><a href="http://wbarczynski.pl" style="color:#fe702f"><span style="text-transform: lowercase;">wbarczynski.pl</span></a>
+								| T: <a href="https://twitter.com/wbarczynski" style="color:#fe702f"><span style="text-transform: lowercase;">@wbarczynski</span></a></small></p>
+						</div>
+					</div>
+				</section -->
+
+				<!--
+					Tell me a story
+				-->
+				<section>
+					<h3>Story</h3><!-- Dude, why should I listen to you? -->
+					<p>Kubernetes + Go + ...</p>
+						<ul>
+							<li><b>Codility_</b> - remote recruitment platform</li>
+							<li><b>SMACC/Hypatos</b> - Fintech / ML</li>
+							<li><b>Lyke</b> - Mobile Fashion app / ML</li>
+						</ul>
+						<br />
+					<!-- p>I do not like Infra</p-->
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### G<span style="text-transform: lowercase;">oal: Continuous Deployment</span>
+
+- Development: max 10 min<br/>
+  Staging: max 15 min<br />
+  Production: max 20 min
+- X to XX changes to production
+- Infrastructure should be invisible
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### G<span style="text-transform: lowercase;">oal: Continuous Deployment</span>
+
+- Frequent releases
+- Higher dev satisfaction
+- Less (big) bugs
+- Faster feature delivery
+
+<p><small>see: <a href="https://www.amazon.com/Accelerate-Software-Performing-Technology-Organizations/dp/1942788339">Accelerate: The Science of Lean Software and DevOps</a></small></p>
+					</script>
+				</section>
+
+				<section data-background="img/intro/company_welcome.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+				<section data-background="img/intro/my_experience.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+				<section data-background="img/intro/black_box.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+				<section data-background="img/intro/lingua_franca.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+				<section>
+					<h4>F<span style="text-transform: lowercase;">rom monolit</span></h4>
+					<img src="img/rubber_duck_monolit.jpg" style="width:90%"/>
+				</section>
+
+				<section>
+					<h4>T<span style="text-transform: lowercase;">o {micro,macro}services</span></h4>
+					<img src="img/rubber_duck_microservices.jpg" style="width:90%"/>
+				</section>
+
+				<section data-background="img/intro/learn_as_you_go.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+				<section data-background="img/intro/app_way_smarter.png" data-background-repeat="" data-background-size="100%">
+				</section>
+
+				<section>
+					<h4>K<span style="text-transform: lowercase;">ubernetes</span></h4>
+					<ul>
+						<li>Container management</li>
+						<li>Battery for 12factor apps</li>
+						<li>Decople dev and admin work</li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>B<span style="text-transform: lowercase;">attery for 12factor apps</span></h4>
+					<ul>
+						<li>Service Discovery</li>
+						<li>Load Balancing</li>
+						<li>Automatic restarts</li>
+						<li>Lingua Franca</li>
+					</ul>
+				</section>
+
+				<section>
+					<h4>Kubernetes</h4>
+					<img src="img/k8s_intro.svg" style="width:90%"/>
+					<small><code>make docker_push; kubectl create -f app-srv-dpl.yaml</code></small>
+				</section>
+
+				<section>
+					<h4>S<span style="text-transform: lowercase;">cale up!</span> S<span style="text-transform: lowercase;">cale down!</span></h4>
+					<img src="img/k8s_intro_scale_up.svg" style="width:90%"/>
+					<small><code>kubectl --replicas=3 -f app-srv-dpl.yaml</code></small>
+				</section>
+
+				<section>
+					<h4>E<span style="text-transform: lowercase;">xample: rolling updates</span></h4>
+					<img src="img/k8s_updates_rolling_1.svg" />
+				</section>
+
+				<section>
+					<h4>E<span style="text-transform: lowercase;">xample: rolling updates</span></h4>
+					<img src="img/k8s_updates_rolling_2.svg" />
+				</section>
+
+				<section>
+					<h4>E<span style="text-transform: lowercase;">xample: rolling updates</span></h4>
+					<img src="img/k8s_updates_rolling_3.svg" />
+				</section>
+
+				<section>
+					<h4>R<span style="text-transform: lowercase;">esilient infra</span></h4>
+					<img src="img/k8s_ha_resistance_1.svg" />
+				</section>
+
+				<section>
+					<h4>R<span style="text-transform: lowercase;">esilient infra</span></h4>
+					<img src="img/k8s_ha_resistance_2.svg" />
+				</section>
+
+				<section>
+					<h4>R<span style="text-transform: lowercase;">esilient infra</span></h4>
+					<img src="img/k8s_ha_resistance_3.svg" />
+				</section>
+
+				<section>
+					<h5>I<span style="text-transform: lowercase;">ngress</span></h5>
+					<img src="img/traefik_architecture.svg" />
+					<p><small>Pluggable ingress controller.</small></p>
+				</section>
+
+				<section>
+					<h5>I<span style="text-transform: lowercase;">ngress</span></h5>
+					<p>Integration with Cloud providers</p>
+					<ul>
+						<li>LoadBalancer will be provisioned from K8S</li>
+					</ul>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### I<span style="text-transform: lowercase;">ngress</span>
+
+<table>
+	<thread>
+		<tr>
+			<th>Pattern</th><th>Target App Service</th>
+		</tr>
+	</thread>
+	<tbody>
+		<tr>
+			<td>api.example.io/v1/users</td><td>users-v1</td>
+		</tr>
+		<tr>
+			<td>api.example.io/v2/users</td><td>users-v2</td>
+		</tr>
+		<tr>
+			<td>example.io</td><td>web</td>
+		</tr>
+	</tbody>
+</table>
+<p><small>Patterns/Rules support wide routing options.</small></p>
+					</script>
+				</section>
+
+				<section>
+					<h4>B<span style="text-transform: lowercase;">asic Concepts</span></h4>
+					<p><table>
+						<thread>
+							<tr>
+								<th>Name</th><th>Purpose</th><th></th>
+							</tr>
+						</thread>
+						<tbody>
+							<tr>
+								<td>Ingress</td><td>Customer interface</td><td>URL to Service</td>
+							</tr>
+						</tbody>
+					</table></p>
+				</section>
+
+
+				<section>
+					<h4>B<span style="text-transform: lowercase;">asic Concepts</span></h4>
+					<p><table>
+						<thread>
+							<tr>
+								<th>Name</th><th>Purpose</th><th></th>
+							</tr>
+						</thread>
+						<tbody>
+							<tr>
+								<td>Service</td><td>Interface</td><td>Entry point (Service Name)</td>
+							</tr>
+							<tr>
+								<td>Deployment</td><td>Factory</td><td>How many pods, which pods</td>
+							</tr>
+							<tr>
+								<td>Pod</td><td>Implementation</td><td>1+ docker running</td>
+							</tr>
+						</tbody>
+					</table></p>
+				</section>
+
+				<section>
+					<h4>D<span style="text-transform: lowercase;">eployment and </span><span style="text-transform: lowercase;">Pods</span></h4>
+					<img src="img/backup_slides/k8s_deployment_and_pods.svg" style="width:80%"/>
+				</section>
+
+				<!-- section>
+					<h3>Deployment.yml</h3>
+
+					<pre><code class="yaml">apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: demo-api
+  labels:
+    app: demo-api
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: demo-api
+  template:
+    metadata:
+      labels:
+        app: demo-api
+    spec:
+      containers:
+      - name: app
+        image: wojciech11/api-status:1.0.0
+        ports:
+        - containerPort: 80</code></pre>
+        </section -->
+
+				<section>
+					<h4>S<span style="text-transform: lowercase;">ervice and pods</span></h4>
+					<img src="img/backup_slides/k8s_service_and_pods.svg" style="width:80%" />
+					<p><small>Service matches pods based on labels</small></p>
+				</section>
+
+				<!-- section>
+					<h3>Service.yml</h3>
+
+					<pre><code class="yaml">apiVersion: v1
+kind: Service
+metadata:
+  name: demo-api
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    app: demo-api
+  type: LoadBalancer</code></pre>
+				</section -->
+
+				<section>
+				<h4>P<span style="text-transform: lowercase;">ods</span></h4>
+				<div class="container">
+					<div class="row">
+						<div class='col-md-6'>
+							<ul>
+								<li>See each other on localhost</li>
+								<li>Live and die together</li>
+								<li>Can expose multiple ports</li>
+							</ul>
+						</div>
+						<div class='col-md-5'>
+							<img src="img/backup_slides/k8s_pod.svg" style="width:90%" />
+						</div>
+					</div>
+				</div>
+				</section>
+
+
+								<section>
+									<h4>L<span style="text-transform: lowercase;">oad-balancing</span></h4>
+									<img src="img/k8s_loadbalancing.svg" style="width:90%" />
+								</section>
+
+				<!-- section>
+					<h3>Side-cars</h3>
+					<img src="img/backup_slides/k8s_pod_2.svg" style="width:90%" />
+				</section -->
+
+				<!-- section>
+					<h3>How get user requests?</h3>
+						<img src="img/traefik_architecture.svg" width="90%"/>
+
+				</section -->
+
+				<section data-markdown>
+					<script type="text/template">
+#### S<span style="text-transform: lowercase;">ervice </span>D<span style="text-transform: lowercase;">iscovery<br />and Labeling</span>
+
+- names in DNS: <br /><code>curl http://users/list</code>
+- labels:<br /><code>name=value</code>
+- annotations: <br /><code>prometheus.io/scrape: "true"</code>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### S<span style="text-transform: lowercase;">ervice Discovery</span>
+
+- loosely couple components
+- auto-wiring with logging and monitoring
+- drop-in installation (traefik, prometheus, ...)
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### A<span style="text-transform: lowercase;">ll hail the git!</span>
+
+- Yaml
+- integration:<br />monitoring, alarming, ingress-controller
+- ...
+- Devs can forget about infra... almost
+- DevOps Culture Dream!
+
+<!-- p><small>+ all tools -&gt; CRD </small></p -->
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### A<span style="text-transform: lowercase;">dvanced!</span>
+
+Sophisicated deployment strategies:
+
+- rollout
+- blue/green
+- canary
+- zero downtime deployments
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### Demo - green/blue
+<img src="img/deployment_strategies/bluegreen_1.svg" style="width:100%"/>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### Demo - green/blue
+<img src="img/deployment_strategies/bluegreen_2.svg" style="width:100%"/>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### Demo - green/blue
+
+<code><pre>kubectl patch service api-status \
+    -p '{"spec":{"selector": {"label": "green"} }}'</code></pre>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+#### Demo - green/blue
+
+<code><pre>kubectl patch service api-status \
+    -p '{"spec":{"selector": {"label": "blue"} }}'</code></pre>
+					</script>
+				</section>
+
+<section>
+<h4>E<span style="text-transform: lowercase;">ffective</span> K<span style="text-transform: lowercase;">ubernetes</span></h4>
+<ul>
+	<li>Start with small iterations</li>
+	<li><b>Learn as-you-go</b></li>
+	<li>Keep Kubernetes Understable</li>
+</ul>
+<!-- p><b>Hope the k8s community keep it this way</b></p -->
+</section>
+
+<section>
+<h4>E<span style="text-transform: lowercase;">ffective</span> K<span style="text-transform: lowercase;">ubernetes</span></h4>
+<ul>
+	<li>Move configuration to runtime</li>
+	<li>Do not terrorize your devs with K8S</li>
+	<li>No free lunch... app must be smarter</li>
+</ul>
+</section>
+
+<section data-background="img/smacc_header_IT_source.jpg" data-background-repeat="" data-background-size="100%" data-background-position="bottom"
+			style="position: relative; top:0">
+				<h4>Thank you. Questions?</h4>
+			</section>
+
+			<section data-background="img/smacc_header_IT_source.jpg" data-background-repeat="" data-background-size="100%" data-background-position="bottom"
+						style="position: relative; top:0">
+							<h4><span style="text-transform: lowercase;">https://github.com/wojciech12/workshop_kubernetes_and_cloudnative</span></h4>
+						</section>
+
+			<section data-background="img/smacc_header_IT_source.jpg" data-background-repeat="" data-background-size="100%" data-background-position="bottom"
+						style="position: relative; top:0">
+							<h4><span style="text-transform: lowercase;">https://github.com/wojciech12/talk_zero_downtime_deployment_with_kubernetes</span></h4>
+						</section>
+
+					<!--
+						BACKUP SLIDES
+					-->
+				<section data-background="img/smacc_header_IT_source.jpg" data-background-repeat="" data-background-size="100%" data-background-position="bottom" style="position: relative; top:0">
+					<h2>Backup Slides</h2>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Infra tools
+
+- Prometheus + AlertMnager + Grafana
+- Traefik
+- Kafka - Yolean/kubernetes-kafka
+- Vault on Etcd - banzaicloud/bank-vaults
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Data stores
+
+- Kafka - Yolean/kubernetes-kafka
+- Etcd - coreos/etcd-operator
+- DB: PSQL and Mongo
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### Backups:
+
+- old-school backups  with ARK and Restic
+- replications across clouds
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 1. Clean up
+
+- Single script for repo - Makefile [1]
+- Resurrect the README
+
+<small>[1] With zsh or bash auto-completion plug-in in your terminal.</small>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 2. Get back all the knowledge
+
+Extract from:
+
+- Puppet, ... ➡ Dockerfile
+- Running Instances ➡ Dockerfile, README.rst
+- Nagios, ... ➡ README.rst + <code>checks/</code>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 3. Introduce run_local
+
+- <code>make run_local</code>
+- A nice section on how to run in README.rst
+- with <code>docker-compose</code>
+
+<p>The most crucial point.</p>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 4. Get to kubernetes
+
+- <code>make kube_create_config</code>
+- <code>make kube_apply</code>
+- Generate the yaml files if your envs differ
+
+<p><small>secrets from gopass (password manager)</small></p>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 5. Continuous Deployment
+
+Travis:
+
+- the same Makefile as dev use
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 6. Keep it running
+
+Bridge the new with old:
+
+- Use External Services in Kubernetes
+- Expose k8s in the Legacy [1]
+
+<p><small>[1] hard coded IP:PORT, considered: K8S events to Consul</small></p>
+					</script>
+				</section>
+
+				<section>
+					<h8>Bridge the new with old</h8>
+					<img src="img/lyke/lyke_new_with_old.svg" width="80%">
+					<p><small>Monitor legacy with new stack</small></p>
+				</section>
+
+				<section>
+					<h8>Architecture During Migration</h8>
+					<img src="img/lyke/lyke_immediately_architecture.svg" width="80%"><!-- br /-->
+					<!-- small>No dev?</small -->
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 7. Introduce smoke-test
+
+<pre><code class="bash">TARGET_URL=127.0.0 make smoke_test
+TARGET_URL=api.example.com/users make smoke_test</code></pre>
+</script>
+<!-- small>Cut pinging tester or ... to check whether component really is running</small-->
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 8. Service self-aware
+
+Add to old services:
+
+1. <i>metrics/</i>
+2. <i>health/</i>
+3. <i>info/</li>
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 9. Move to micro-services
+
+Offload Legacy:
+
+- Keep the lights on
+- New functionality to micro-services
+					</script>
+				</section>
+
+				<section data-markdown>
+					<script type="text/template">
+### 10. Get performance testing
+
+- <i>wrk</i> for evaluating performance
+- load test the real system
+					</script>
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
